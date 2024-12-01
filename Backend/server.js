@@ -8,9 +8,9 @@ app.use(cors());
 
 //Create connection to MySQL
 const con = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "root",
+  host: "<host>",
+  user: "<username>",
+  password: "<password>",
   database: "shop",
 });
 
@@ -42,6 +42,6 @@ app.get("/products", async (req, res) => {
 });
 
 // Start the server
-app.listen(PORT, () => {
+app.listen(PORT, "<public_IP>", () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
