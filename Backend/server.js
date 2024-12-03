@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const app = express();
 const PORT = 5000;
+const IP = "0.0.0.0";
 const mysql = require("mysql2");
 
 app.use(cors());
@@ -42,6 +43,6 @@ app.get("/products", async (req, res) => {
 });
 
 // Start the server
-app.listen(PORT, "<public_IP>", () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+app.listen(PORT, IP, () => {
+  console.log(`Server is running on http://${IP}:${PORT}`);
 });
