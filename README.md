@@ -9,14 +9,14 @@
 
 2. Create two subnets in two different availability zones to separate RDS and EC2
 
-Public subnet:
+##### Public subnet:
 
 - VPC: `myVPC`
 - Name: `myPublicSubnet`
 - CIDR block: `10.0.0.0/25`
 - AZ: `us-east-1a`
 
-Private subnet:
+##### Private subnet:
 
 - VPC: `myVPC`
 - Name: `myPrivateSubnet`
@@ -29,13 +29,13 @@ Private subnet:
 
 4. Create two route tables for the previously created subnets
 
-Create public route table:
+##### Create public route table:
 
 - Name: `myPublicRoute`
 - Subnet association: `myPublicSubnet`
 - Route: Add route `0.0.0.0/0` to internet gateway `myIG`
 
-Create private route table:
+##### Create private route table:
 
 - Name: `myPrivateRoute`
 - Subnet association: `myPrivateSubnet`
