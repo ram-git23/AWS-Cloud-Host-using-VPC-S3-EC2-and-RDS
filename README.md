@@ -92,18 +92,6 @@
 - Import the database using the following command
   `mysql -h <rds_endpoint> -u admin -p shop < shopdb.sql`
 
-9. Install apache server and move the backend file
-
-```
-- sudo apt update
-  sudo apt install apache2
-
-  sudo systemctl start apache2
-  sudo systemctl enable apache2
-
-  sudo mv server.js /var/www/html/
-```
-
 10. Install the required tools and libraries
 
 ```
