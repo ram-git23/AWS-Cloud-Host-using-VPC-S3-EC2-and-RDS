@@ -2,6 +2,8 @@
 
 ### The following steps demonstrate the hosting of a simple website with S3 as Frontend, EC2 as Backend, RDS as Database in a custom VPC
 
+##### [ Note: The identifier names used are meant only for the purpose of understanding. ]
+
 1. Create a VPC
 
 - Name: `myVPC`
@@ -42,7 +44,7 @@
 
 5. Create S3 bucket and enable Staic Web Hosting
 
-- Name: `myfrontendbucket` (Should be globally unique)
+- Name: `mybucket` (Should be globally unique)
 - Disable ACLs
 - Uncheck Block all public access
 - Click on 'Create'
@@ -56,7 +58,7 @@
   "Effect": "Allow",
   "Principal": "*",
   "Action": "s3:GetObject",
-  "Resource": "arn:aws:s3:::my-static-website-bucket/*"
+  "Resource": "arn:aws:s3:::mybucket/*"
   }
   ]
   }
