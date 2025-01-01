@@ -1,1 +1,5 @@
 shopdb.sql
+.env
+Backend/node_modules
+Backend/package.json
+Backend/package-lock.json

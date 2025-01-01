@@ -1,17 +1,21 @@
+const path = require("path");
+require("dotenv").config({ path: path.resolve(__dirname, "../.env") });
+
 const express = require("express");
 const cors = require("cors");
-const app = express();
-const PORT = 5000;
-const IP = "0.0.0.0";
 const mysql = require("mysql2");
+
+const app = express();
+const PORT = process.env.PORT;
+const IP = process.env.IP;
 
 app.use(cors());
 
 //Create connection to MySQL
 const con = mysql.createConnection({
-  host: "<host>",
-  user: "<username>",
-  password: "<password>",
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASS,
   database: "shop",
 });
 
