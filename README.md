@@ -1,64 +1,71 @@
+# AWS Cloud Host using VPC, S3, EC2 and RDS
+
+### The following steps demonstrate the hosting of a simple website with S3 as Frontend, EC2 as Backend, RDS as Database in a custom VPC
+
+##### [ Note: The identifier names used are meant only for the purpose of understanding. ]
+
 1. Create a VPC
 
 - Name: `myVPC`
 - CIDR block: `10.0.0.0/24`
 
-2. Create two subnets in two different AZ
+2. Create two subnets in two different availability zones to separate RDS and EC2
 
-Public subnet:
+##### Public subnet:
 
 - VPC: `myVPC`
 - Name: `myPublicSubnet`
 - CIDR block: `10.0.0.0/25`
 - AZ: `us-east-1a`
 
-Private subnet:
+##### Private subnet:
 
 - VPC: `myVPC`
 - Name: `myPrivateSubnet`
 - CIDR block: `10.0.0.128/25`
 - AZ: `us-east-1b`
 
-3. Create internet gateway
+3. Create Internet Gateway (IGW) to enable instances in your VPC to connect to the Internet
 
-- Create internet gateway `myIG` and attach it to `myVPC`
+- Create Internet Gateway `myIG` and attach it to `myVPC`
 
-4. Create two route tables
+4. Create two route tables for the previously created subnets
 
-Create public route table:
+##### Create public route table:
 
 - Name: `myPublicRoute`
 - Subnet association: `myPublicSubnet`
 - Route: Add route `0.0.0.0/0` to internet gateway `myIG`
 
-Create private route table:
+##### Create private route table:
 
 - Name: `myPrivateRoute`
 - Subnet association: `myPrivateSubnet`
 
-5. Create S3 bucket
+5. Create S3 bucket and enable Staic Web Hosting
 
-- Name: `myfrontendbucket` (Should be globally unique)
+- Name: `mybucket` (Should be globally unique)
 - Disable ACLs
 - Uncheck Block all public access
 - Click on 'Create'
 - Upload the frontend files
 - Add the following bucket policy:
-  ````{
+  ```
+  {
   "Version": "2012-10-17",
   "Statement": [
   {
   "Effect": "Allow",
   "Principal": "*",
   "Action": "s3:GetObject",
-  "Resource": "arn:aws:s3:::my-static-website-bucket/*"
+  "Resource": "arn:aws:s3:::mybucket/*"
   }
   ]
-  }```
-  ````
+  }
+  ```
 - Enable Static Web Hosting
 
-6. Create EC2 instance
+6. Create EC2 instance to run the backend server
 
 - Name: `myServer`
 - AMI: `Ubuntu`
@@ -67,16 +74,14 @@ Create private route table:
 - VPC: `myVPC`
 - Subnet: `myPublicSubnet`
 - Auto-assign public IP: Enable
-- Security group: Create new
 
-7. Create RDS
+7. Create RDS for Database
 
 - Engine: `MariaDB`
 - Name: `myDB`
 - VPC: `myVPC`
 - Availability zone: `us-east-1b`
-- Create new security group
-- Set up EC2 connection with myServer
+- Set up EC2 connection with `myServer`
 
 8. Launch EC2 instance and connect to RDS endpoint
 
@@ -87,17 +92,9 @@ Create private route table:
 - Import the database using the following command
   `mysql -h <rds_endpoint> -u admin -p shop < shopdb.sql`
 
-9. Install apache server and host it on EC2 instance
+10. Install the required tools and libraries
 
 ```
-- sudo apt update
-  sudo apt install apache2
-
-  sudo systemctl start apache2
-  sudo systemctl enable apache2
-
-  sudo mv server.js /var/www/html/
-
   sudo apt install nodejs
   sudo apt install npm
 
@@ -105,7 +102,7 @@ Create private route table:
   sudo npm install express cors mysql2
 ```
 
-Make changes within server.js with database endpoint details
+11. Make changes within server.js with database endpoint details
 
 ```
 const con = mysql.createConnection({
@@ -119,6 +116,6 @@ database: "shop",
 Start the server with the following command:
 `sudo node server.js`
 
-10. Update the script.js in the frontend with the public IP of EC2
+12. Update the script.js in the frontend with the public IP of EC2
 
-11. Add a security group inbound rule in the EC2 instance with the port 5000
+13. Add a security group inbound rule in the EC2 instance with the port 5000
